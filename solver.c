@@ -76,7 +76,7 @@ void parallelSolve(double **A, int n)
                 MPI_Recv(message, N + 1, MPI_DOUBLE, rank - 1,  0, MPI_COMM_WORLD, &Stat);
                 // Now copy the shadow region into it's proper place.
 
-                #pragma omp parallel for ordered schedule(static) num_threads(2)
+                #pragma omp parallel for ordered schedule(static) num_threads(4)
                 for(i = 1; i < n; i++)
                 {
                     A[i][jLower - 1] =  A[i][jLower];
@@ -90,7 +90,7 @@ void parallelSolve(double **A, int n)
             {
                 MPI_Recv(message2, N + 1, MPI_DOUBLE, rank + 1,  0, MPI_COMM_WORLD, &Stat);
                 // Now copy the shadow region into it's proper place.
-                #pragma omp parallel for ordered schedule(static) num_threads(2)
+                #pragma omp parallel for ordered schedule(static) num_threads(4)
                 for(i = 1; i < n; i++)
                 {
                     A[i][jUpper] =  A[i][jUpper - 1];
@@ -119,7 +119,7 @@ void parallelSolve(double **A, int n)
             if(rank != 0)
             {               
                 // copy the shadow region to the message array.
-                #pragma omp parallel for ordered schedule(static) num_threads(2)
+                #pragma omp parallel for ordered schedule(static) num_threads(4)
                 for(i = 1; i < n; i++)
                 {
                     message3[1 + i] = A[i][jLower];
@@ -130,7 +130,7 @@ void parallelSolve(double **A, int n)
             // Only do this if you have a left neighbour
             if(rank != (size - 1))
             {
-                #pragma omp parallel for ordered schedule(static) num_threads(2)
+                #pragma omp parallel for ordered schedule(static) num_threads(4)
                 for(i = 1; i < n; i++)
                 {
                     message4[1 + i] = A[i][jUpper];
@@ -141,7 +141,7 @@ void parallelSolve(double **A, int n)
 
     }
 
-    double *message5 = (double *)malloc((n + 2) * chunckSize * sizeof(double));
+    double *message5 = (double *)calloc((n + 2), chunckSize * sizeof(double));
     int f = n - 1;
     if(rank == 0)
     {
@@ -149,7 +149,7 @@ void parallelSolve(double **A, int n)
         {
             int lowerBound = target * chunckSize, upperBound = target == (size - 1) ? n : (target + 1) * chunckSize;
             MPI_Recv(message5, n * chunckSize, MPI_DOUBLE, target, 0, MPI_COMM_WORLD, &Stat);
-            #pragma omp parallel for ordered schedule(static) num_threads(2)
+            #pragma omp parallel for ordered schedule(static) num_threads(4)
             for(int i = 1; i < n; i++)
             {
                 for(int j = lowerBound; j < upperBound; j++)
@@ -166,7 +166,7 @@ void parallelSolve(double **A, int n)
         
         int lowerBound = rank * chunckSize, upperBound = rank == (size - 1) ? n : (rank + 1) * chunckSize;
         //printf("%d %d \n", upperBound, lowerBound);
-        #pragma omp parallel for ordered schedule(static) num_threads(2)
+        #pragma omp parallel for ordered schedule(static) num_threads(4)
         for(int i = 1; i < n; i++)
         {
             for(int j = lowerBound; j < upperBound; j++)
@@ -272,6 +272,8 @@ int main(int argc, char * argv[])
         matrixPrint(A);
     }
    initialize(B, N);
+
+   MPI_Barrier(MPI_COMM_WORLD);
 
    t_start = MPI_Wtime();
    parallelSolve(B, N);
