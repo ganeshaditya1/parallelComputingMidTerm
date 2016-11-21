@@ -4,8 +4,8 @@
 #SBATCH -e NATIVE_BARRIER_BUTTERFLY.%J.stderr
 #SBATCH -p development
 #SBATCH -N 1
-#SBATCH -n 32
-#SBATCH --ntasks=32
+#SBATCH -n 16
+#SBATCH --ntasks=16
 #SBATCH --cpus-per-task=1
 #SBATCH -t 00:10:00
 
@@ -23,5 +23,3 @@ echo "8 cores"
 mpirun -np 8 ./solve
 echo "16 cores"
 mpirun -np 16 ./solve
-echo "32 cores"
-mpirun -np 32 ./solve
