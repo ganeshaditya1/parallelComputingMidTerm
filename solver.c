@@ -221,7 +221,7 @@ double validator(double **A, double **B, int n)
         {
             if(A[i][j] != B[i][j])
             {
-                printf("%d %d", i, j);
+                //printf("%d %d", i, j);
                 return 0;
             }
         }    
@@ -286,7 +286,7 @@ int main(int argc, char * argv[])
         timeParallel = t_end - t_start;
         printf("Parallel computation time = %f\n", timeParallel);    
         printf("Speedup is: [%.2fx]\n", timeSerial/timeParallel);
-        printf("Difference is %.2f\n", validator(A, B, N));
+        //printf("Difference is %.2f\n", validator(A, B, N));
         //matrixPrint(B);
     }
 
