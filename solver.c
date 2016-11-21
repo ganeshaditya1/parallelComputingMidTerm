@@ -269,7 +269,7 @@ int main(int argc, char * argv[])
 
         timeSerial = t_end - t_start;
         printf("Serial computation time = %f\n", timeSerial);
-        matrixPrint(A);
+        //matrixPrint(A);
     }
    initialize(B, N);
 
@@ -287,7 +287,9 @@ int main(int argc, char * argv[])
         printf("Parallel computation time = %f\n", timeParallel);    
         printf("Speedup is: [%.2fx]\n", timeSerial/timeParallel);
         printf("Difference is %.2f\n", validator(A, B, N));
-        matrixPrint(B);
+        //matrixPrint(B);
     }
+
+    MPI_Finalize();
 
 }
