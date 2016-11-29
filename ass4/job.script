@@ -12,7 +12,7 @@ sleep 3
 echo ============== START ==============
 hostname
 module load cuda
-make
-./deviceQuery
+nvcc helloWorld.cu
+./a.out
 echo =============== END ===============
 sleep 3
