@@ -17,7 +17,7 @@ int main()
 	cudaMemcpy(d_a, a, sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_b, b, sizeof(int), cudaMemcpyHostToDevice);
 	kernel<<<1, 1>>>(d_a, d_b, d_c);
-	cudaMemcpy(d_c, c, sizeof(int), cudaMemcpyDeviceToHost);
-	printf("Asd %d\n", *d_c);
+	cudaMemcpy(c, d_c, sizeof(int), cudaMemcpyDeviceToHost);
+	printf("Asd %d\n", *c);
 	return 0;
 }
