@@ -12,8 +12,8 @@ int main()
 	int *d_a, *d_b, *d_c;
 	*a = 7;
 	*b = 8;
-	d_a = cudaMalloc((void **)&d_a, sizeof(int));
-	d_b = cudaMalloc((void **)&d_b, sizeof(int));
+	cudaMalloc((void **)&d_a, sizeof(int));
+	cudaMalloc((void **)&d_b, sizeof(int));
 	cudaMemcpy(d_a, a, sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_b, b, sizeof(int), cudaMemcpyHostToDevice);
 	kernel<<<1, 1>>>(d_a, d_b, d_c);
