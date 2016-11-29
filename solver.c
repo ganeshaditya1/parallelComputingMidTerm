@@ -98,6 +98,8 @@ void parallelSolve(double **A, int n)
                 }
             }
         }
+
+// DO THE MAIN PART OF THE PROBLEM NOW.
          for (i=1;i<n;i++)
          {
            for (j=jLower;j<jUpper;j++)
@@ -140,7 +142,8 @@ void parallelSolve(double **A, int n)
         }
 
     }
-
+// We are done solving the problem, Now time to send the strip that this process worked on to the master process which will 
+// Put it in it's rightful place.
     double *message5 = (double *)calloc((n + 2), chunckSize * sizeof(double));
     int f = n - 1;
     if(rank == 0)
