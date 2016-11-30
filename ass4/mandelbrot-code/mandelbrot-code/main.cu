@@ -22,7 +22,7 @@ extern void mandelbrotSerial(
 // Ugly hack to deal with linker issues
 
 
-static inline int mandel(float c_re, float c_im, int count)
+__global__ static inline int mandel(float c_re, float c_im, int count)
 {
     float z_re = c_re, z_im = c_im;
     int i;
@@ -55,8 +55,8 @@ __global__ void mandelbrotThread(
     float dx = (*x1 - *x0) / *width;
     float dy = (*y1 - *y0) / *height;
 
-    int perBlockXQuota = ceil(*width/gridDim.x);
-    int perBlockYQuota = ceil(*height/gridDim.y);
+    int perBlockXQuota = (int)ceilf(*width/(float)gridDim.x);
+    int perBlockYQuota = (int)ceilf(*height/(float)gridDim.y);
 
     int startX = blockIdx.x * perBlockXQuota;
     int endX = (blockIdx.x + 1) * perBlockXQuota;

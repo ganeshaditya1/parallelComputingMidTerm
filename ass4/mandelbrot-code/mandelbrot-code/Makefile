@@ -23,14 +23,14 @@ clean:
 OBJS=$(OBJDIR)/main.o $(OBJDIR)/mandelbrotSerial.o $(OBJDIR)/mandelbrotThread.o $(PPM_OBJ)
 
 $(APP_NAME): dirs $(OBJS)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) -lm
+		$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
 $(OBJDIR)/%.o: %.cpp
-		$(CXX) $< $(CXXFLAGS) -c -o $@ -lm
+		$(CXX) $< $(CXXFLAGS) -c -o $@
 
 
 $(OBJDIR)/%.o: %.cu
-		$(CXX) $< $(CXXFLAGS) -c -o $@ -lm
+		$(CXX) $< $(CXXFLAGS) -c -o $@
 
 $(OBJDIR)/%.o: $(COMMONDIR)/%.cpp
 	$(CXX) $< $(CXXFLAGS) -c -o $@
