@@ -41,7 +41,6 @@
 #include <time.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <omp.h>
 static inline int mandel(float c_re, float c_im, int count)
 {
     float z_re = c_re, z_im = c_im;
@@ -82,12 +81,8 @@ void mandelbrotSerial(
     float dy = (y1 - y0) / height;
 
     int endRow = startRow + totalRows;
-
-    uint64_t diff;
-    struct timespec start, end;
         
     clock_gettime(CLOCK_MONOTONIC, &start);
-    #pragma omp parallel for ordered schedule(dynamic)
     for (int j = startRow; j < endRow; j++) {
         for (int i = 0; i < width; ++i) {
             float x = x0 + i * dx;
@@ -100,7 +95,5 @@ void mandelbrotSerial(
     //printf("elapsed time = %llu nanoseconds, %d\n", (long long unsigned int) diff, j);
     }
 
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    diff = (1000000000 *(end.tv_sec - start.tv_sec) + end.tv_nsec - start.tv_nsec);
 }
 
