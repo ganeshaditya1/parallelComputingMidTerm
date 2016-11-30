@@ -28,6 +28,10 @@ $(APP_NAME): dirs $(OBJS)
 $(OBJDIR)/%.o: %.cpp
 		$(CXX) $< $(CXXFLAGS) -c -o $@ -lm
 
+
+$(OBJDIR)/%.o: %.cu
+		$(CXX) $< $(CXXFLAGS) -c -o $@ -lm
+
 $(OBJDIR)/%.o: $(COMMONDIR)/%.cpp
 	$(CXX) $< $(CXXFLAGS) -c -o $@
 
