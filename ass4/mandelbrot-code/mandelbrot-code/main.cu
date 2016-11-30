@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 
 
     double startTime = CycleTimer::currentSeconds();
-    mandelbrotThread<<<100, 1>>>(d_x0, d_y0, d_x1, d_y1, d_width, d_height, d_maxIterations, d_output_thread);
+    mandelbrotThread<<<50000, 1>>>(d_x0, d_y0, d_x1, d_y1, d_width, d_height, d_maxIterations, d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 
     double endTime = CycleTimer::currentSeconds();
