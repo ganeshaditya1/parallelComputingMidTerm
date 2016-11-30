@@ -141,14 +141,38 @@ int main(int argc, char** argv) {
     //
     // Run the threaded version
     //
-    /*memset(output_thread, 0, width * height * sizeof(int));
+    memset(output_thread, 0, width * height * sizeof(int));
     double minThread = 1e30;
-    for (int i = 0; i < 3; ++i) {
-        double startTime = CycleTimer::currentSeconds();
-        mandelbrotThread(numThreads, x0, y0, x1, y1, width, height, maxIterations, output_thread);
-        double endTime = CycleTimer::currentSeconds();
-        minThread = std::min(minThread, endTime - startTime);
-    }
+    double startTime = CycleTimer::currentSeconds();
+
+
+    int *d_output_thread, *d_width, *d_height, *d_maxIterations;
+    float *d_x0, *d_y0, *d_x1, *d_y1;
+
+    cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
+    cudaMalloc((void**)&d_width, sizeof(int));
+    cudaMalloc((void**)&d_height, sizeof(int));
+    cudaMalloc((void**)&d_maxIterations, sizeof(int));
+    cudaMalloc((void**)&d_x0, sizeof(float));
+    cudaMalloc((void**)&d_y0, sizeof(float));
+    cudaMalloc((void**)&d_x1, sizeof(float));
+    cudaMalloc((void**)&d_y1, sizeof(float));
+
+    cudaMemcpy(d_width, &width, sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_height, &height, sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_maxIterations, &maxIterations, sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_x0, &x0, sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_x1, &x1, sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y1, &y1, sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y0, &y0, sizeof(float), cudaMemcpyHostToDevice);
+
+
+    mandelbrotThread<<<100, 1>>>(d_x0, d_y0, d_x1, d_y1, d_width, d_height, d_maxIterations, d_output_thread);
+    cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
+
+
+
+    double endTime = CycleTimer::currentSeconds();
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
     writePPMImage(output_thread, width, height, "mandelbrot-thread.ppm", maxIterations);
@@ -167,6 +191,6 @@ int main(int argc, char** argv) {
 
     delete[] output_serial;
     delete[] output_thread;
-*/
+
     return 0;
 }
