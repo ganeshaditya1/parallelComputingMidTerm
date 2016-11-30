@@ -227,14 +227,14 @@ int main(int argc, char** argv) {
     cudaMemcpy(d_x1, &x1, sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(d_y1, &y1, sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(d_y0, &y0, sizeof(float), cudaMemcpyHostToDevice);
-
+double endTime = CycleTimer::currentSeconds();
 
     mandelbrotThread<<<100, 1>>>(d_x0, d_y0, d_x1, d_y1, d_width, d_height, d_maxIterations, d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 
 
 
-    double endTime = CycleTimer::currentSeconds();
+    
     minThread = endTime - startTime;
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
