@@ -22,7 +22,7 @@ extern void mandelbrotSerial(
 // Ugly hack to deal with linker issues
 
 
-__global__ static inline int mandel(float c_re, float c_im, int count)
+__device__ void mandel(float c_re, float c_im, int count, int *counter)
 {
     float z_re = c_re, z_im = c_im;
     int i;
@@ -36,8 +36,7 @@ __global__ static inline int mandel(float c_re, float c_im, int count)
         z_re = c_re + new_re;
         z_im = c_im + new_im;
     }
-
-    return i;
+    *counter = i;
 }
 
 
@@ -72,7 +71,8 @@ __global__ void mandelbrotThread(
             float y = *y0 + j * dy;
 
             int index = (j * (*width) + i);
-            output[index] = mandel(x, y, *maxIterations);
+
+            mandel(x, y, *maxIterations, &output[index]);
         }
 
     }
