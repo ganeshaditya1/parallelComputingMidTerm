@@ -14,10 +14,9 @@ extern void mandelbrotSerial(
     int output[]);
 
 extern void mandelbrotThread(
-    int numThreads,
-    float x0, float y0, float x1, float y1,
-    int width, int height,
-    int maxIterations,
+    float* x0, float* y0, float* x1, float* y1,
+    int* width, int* height,
+    int* maxIterations,
     int output[]);
 
 extern void writePPMImage(
@@ -175,7 +174,7 @@ int main(int argc, char** argv) {
 
 
     double endTime = CycleTimer::currentSeconds();
-    double minThread = endTime - startTime;
+    minThread = endTime - startTime;
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
     writePPMImage(output_thread, width, height, "mandelbrot-thread.ppm", maxIterations);
