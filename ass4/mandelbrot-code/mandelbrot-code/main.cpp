@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <getopt.h>
+#include <cuda_runtime_api.h>
+#include <cuda.h>
 
 #include "CycleTimer.h"
 
@@ -173,6 +175,7 @@ int main(int argc, char** argv) {
 
 
     double endTime = CycleTimer::currentSeconds();
+    double minThread = endTime - startTime;
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
     writePPMImage(output_thread, width, height, "mandelbrot-thread.ppm", maxIterations);
