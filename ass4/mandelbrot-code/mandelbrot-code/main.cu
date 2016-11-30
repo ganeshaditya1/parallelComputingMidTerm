@@ -58,12 +58,12 @@ __global__ void mandelbrotThread(
     int perBlockXQuota = ceil(*width/gridDim.x);
     int perBlockYQuota = ceil(*height/gridDim.y);
 
-    int startX = blockId.x * perBlockXQuota;
-    int endX = (blockId.x + 1) * perBlockXQuota;
+    int startX = blockIdx.x * perBlockXQuota;
+    int endX = (blockIdx.x + 1) * perBlockXQuota;
     endX = endX > *width ? *width : endX;
 
-    int startY = blockId.y * perBlockYQuota;
-    int endY = (blockId.y + 1) * perBlockYQuota;
+    int startY = blockIdx.y * perBlockYQuota;
+    int endY = (blockIdx.y + 1) * perBlockYQuota;
     endY = endY > *height ? *height : endY;
 
     for (int j = startY; j < endY; j++) {
