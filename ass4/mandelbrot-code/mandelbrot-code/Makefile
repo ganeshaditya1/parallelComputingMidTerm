@@ -1,6 +1,6 @@
 
 CXX=nvcc -m64
-CXXFLAGS=-I../common -Iobjs/ -O3 -Wall -fopenmp 
+CXXFLAGS=-I../common -Iobjs/ -O3 --compiler-options -Wall 
 
 APP_NAME=mandelbrot
 OBJDIR=objs
@@ -23,7 +23,7 @@ clean:
 OBJS=$(OBJDIR)/main.o $(OBJDIR)/mandelbrotSerial.o $(OBJDIR)/mandelbrotThread.o $(PPM_OBJ)
 
 $(APP_NAME): dirs $(OBJS)
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) -lm -lpthread
+		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) -lm
 
 $(OBJDIR)/%.o: %.cpp
 		$(CXX) $< $(CXXFLAGS) -c -o $@
