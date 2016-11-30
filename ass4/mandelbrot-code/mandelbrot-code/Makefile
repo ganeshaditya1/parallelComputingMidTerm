@@ -1,5 +1,5 @@
 
-CXX=g++ -m64
+CXX=nvcc -m64
 CXXFLAGS=-I../common -Iobjs/ -O3 -Wall -fopenmp 
 
 APP_NAME=mandelbrot
