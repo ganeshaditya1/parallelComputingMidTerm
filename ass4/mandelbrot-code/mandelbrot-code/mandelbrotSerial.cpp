@@ -82,7 +82,6 @@ void mandelbrotSerial(
 
     int endRow = startRow + totalRows;
         
-    clock_gettime(CLOCK_MONOTONIC, &start);
     for (int j = startRow; j < endRow; j++) {
         for (int i = 0; i < width; ++i) {
             float x = x0 + i * dx;
