@@ -12,7 +12,8 @@ sleep 3
 echo ============== START ==============
 hostname
 module load cuda
-nvcc helloWorld.cu
-./a.out
+cd mandelbrote-code/mandelbrote-code
+make
+./mandelbrot
 echo =============== END ===============
 sleep 3
