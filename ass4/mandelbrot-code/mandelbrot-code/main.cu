@@ -64,7 +64,7 @@ __global__ void mandelbrotThread(
     int perBlockYQuota = (int)ceilf(height/(float)gridDim.y);
 
     int perThreadXQuota = (int)ceilf(perBlockXQuota/(float)blockDim.x);
-    int perThreadYQuota = (int)ceilf(perBlockYQuota/(float)blockDim.Y);
+    int perThreadYQuota = (int)ceilf(perBlockYQuota/(float)blockDim.y);
 
     int startBlockX = blockIdx.x * perBlockXQuota;
     int endBlockX = (blockIdx.x + 1) * perBlockXQuota;
@@ -223,7 +223,7 @@ int main(int argc, char** argv) {
 
     
     double startTime = CycleTimer::currentSeconds();
-    int *d_output_thread
+    int *d_output_thread;
     /*    , *d_width, *d_height, *d_maxIterations;
     float *d_x0, *d_y0, *d_x1, *d_y1;*/
 
