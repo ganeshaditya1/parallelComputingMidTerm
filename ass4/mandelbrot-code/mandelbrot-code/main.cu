@@ -49,8 +49,8 @@ __device__ void mandel(float c_re, float c_im, int count, int *counter)
 __global__ void mandelbrotThread(
     int output[])
 {
-    const unsigned int width = 1200;
-    const unsigned int height = 800;
+    const unsigned int width = 1200 * 2;
+    const unsigned int height = 800 * 2;
     const int maxIterations = 256;
 
     float x0 = -2;
@@ -149,8 +149,8 @@ bool verifyResult (int *gold, int *result, int width, int height) {
 
 int main(int argc, char** argv) {
 
-    const unsigned int width = 1200;
-    const unsigned int height = 800;
+    const unsigned int width = 1200 * 2;
+    const unsigned int height = 800 * 2;
     const int maxIterations = 256;
 
     float x0 = -2;
@@ -231,7 +231,7 @@ int main(int argc, char** argv) {
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
 
 
-    mandelbrotThread<<<50000, 500>>>(d_output_thread);
+    mandelbrotThread<<<5, 500>>>(d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 double endTime = CycleTimer::currentSeconds();
     
