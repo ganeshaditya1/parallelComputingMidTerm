@@ -232,7 +232,7 @@ double endTime = CycleTimer::currentSeconds();
     minThread = endTime - startTime;
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
-    writePPMImage(output_thread, width, height, "mandelbrot-thread.ppm", maxIterations);
+    writePPMImage(output_thread, width, height, "mandelbrot-thread2.ppm", maxIterations);
 
     if (! verifyResult (output_serial, output_thread, width, height)) {
         printf ("Error : Output from threads does not match serial output\n");
