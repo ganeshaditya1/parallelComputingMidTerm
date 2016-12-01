@@ -139,6 +139,7 @@ bool verifyResult (int *gold, int *result, int width, int height) {
             if (gold[i * width + j] != result[i * width + j]) {
                 printf ("Mismatch : [%d][%d], Expected : %d, Actual : %d\n",
                             i, j, gold[i * width + j], result[i * width + j]);
+                return 0;
             }
         }
     }
@@ -230,7 +231,7 @@ int main(int argc, char** argv) {
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
 
 
-    mandelbrotThread<<<50000, 1>>>(d_output_thread);
+    mandelbrotThread<<<50000, 500>>>(d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 double endTime = CycleTimer::currentSeconds();
     
