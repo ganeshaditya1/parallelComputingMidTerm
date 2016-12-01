@@ -219,12 +219,12 @@ int main(int argc, char** argv) {
     float *d_x0, *d_y0, *d_x1, *d_y1;
 
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
-
+double endTime = CycleTimer::currentSeconds();
 
     mandelbrotThread<<<50000, 1>>>(d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 
-    double endTime = CycleTimer::currentSeconds();
+    
 
     
     minThread = endTime - startTime;
