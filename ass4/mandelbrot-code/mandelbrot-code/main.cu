@@ -213,10 +213,10 @@ int main(int argc, char** argv) {
     memset(output_thread, 0, width * height * sizeof(int));
     double minThread = 1e30;
 
-    double startTime = CycleTimer::currentSeconds();
-
     int *d_output_thread, *d_width, *d_height, *d_maxIterations;
     float *d_x0, *d_y0, *d_x1, *d_y1;
+    double startTime = CycleTimer::currentSeconds();
+
 
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
 double endTime = CycleTimer::currentSeconds();
