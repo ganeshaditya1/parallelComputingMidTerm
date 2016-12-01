@@ -208,6 +208,7 @@ int main(int argc, char** argv) {
     // take the minimum to get a good estimate.
     //
     memset(output_serial, 0, width * height * sizeof(int));
+    printf("Height: %d, Width: %d\n", height, width);
     double minSerial = 1e30;
     for (int i = 0; i < 3; ++i) {
         double startTime = CycleTimer::currentSeconds();
