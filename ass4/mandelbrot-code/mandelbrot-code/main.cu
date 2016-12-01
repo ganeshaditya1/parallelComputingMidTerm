@@ -152,7 +152,6 @@ int main(int argc, char** argv) {
     const unsigned int width = 1200;
     const unsigned int height = 800;
     const int maxIterations = 256;
-    int numThreads = 2;
 
     float x0 = -2;
     float x1 = 1;
@@ -257,10 +256,7 @@ double endTime = CycleTimer::currentSeconds();
     }
 
     // compute speedup
-    printf("\t\t\t\t(%.2fx speedup from %d threads)\n", minSerial/minThread, numThreads);
-
-    delete[] output_serial;
-    delete[] output_thread;
+    printf("\t\t\t\t(%.2fx speedup)\n", minSerial/minThread);
 
     return 0;
 }
