@@ -52,7 +52,6 @@ __global__ void mandelbrotThread(
     const unsigned int width = 1200;
     const unsigned int height = 800;
     const int maxIterations = 256;
-    int numThreads = 2;
 
     float x0 = -2;
     float x1 = 1;
@@ -75,8 +74,8 @@ __global__ void mandelbrotThread(
     int endBlockY = (blockIdx.y + 1) * perBlockYQuota;
     endBlockY = endBlockY > height ? height : endBlockY;
 
-    int startX = startBlockX + (ThreadIdx.x * perThreadXQuota);
-    int endX = startBlockX + ((ThreadIdx.x + 1) * perThreadXQuota);
+    int startX = startBlockX + (threadIdx.x * perThreadXQuota);
+    int endX = startBlockX + ((threadIdx.x + 1) * perThreadXQuota);
     endX = endX > endBlockX ? endBlockX : endX;
 
     int startY = startBlockY + (ThreadIdx.y * perThreadYQuota);
@@ -167,14 +166,9 @@ int main(int argc, char** argv) {
         {0 ,0, 0, 0}
     };
 
-    while ((opt = getopt_long(argc, argv, "t:v:?", long_options, NULL)) != EOF) {
+    while ((opt = getopt_long(argc, argv, "v:?", long_options, NULL)) != EOF) {
 
         switch (opt) {
-        case 't':
-        {
-            numThreads = atoi(optarg);
-            break;
-        }
         case 'v':
         {
             int viewIndex = atoi(optarg);
@@ -228,9 +222,9 @@ int main(int argc, char** argv) {
     cudaMalloc((void**)&x, sizeof(int));
 
     
-    double startTime = CycleTimer::currentSeconds();
+    double startTime = CycleTimer::currentSeconds();/*
     int *d_output_thread, *d_width, *d_height, *d_maxIterations;
-    float *d_x0, *d_y0, *d_x1, *d_y1;
+    float *d_x0, *d_y0, *d_x1, *d_y1;*/
 
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
 
