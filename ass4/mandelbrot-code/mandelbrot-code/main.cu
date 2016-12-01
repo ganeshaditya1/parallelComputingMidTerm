@@ -64,13 +64,26 @@ __global__ void mandelbrotThread(
     int perBlockXQuota = (int)ceilf(width/(float)gridDim.x);
     int perBlockYQuota = (int)ceilf(height/(float)gridDim.y);
 
-    int startX = blockIdx.x * perBlockXQuota;
-    int endX = (blockIdx.x + 1) * perBlockXQuota;
-    endX = endX > width ? width : endX;
+    int perThreadXQuota = (int)ceilf(perBlockXQuota/(float)blockDim.x);
+    int perThreadYQuota = (int)ceilf(perBlockYQuota/(float)blockDim.Y);
 
-    int startY = blockIdx.y * perBlockYQuota;
-    int endY = (blockIdx.y + 1) * perBlockYQuota;
-    endY = endY > height ? height : endY;
+    int startBlockX = blockIdx.x * perBlockXQuota;
+    int endBlockX = (blockIdx.x + 1) * perBlockXQuota;
+    endBlockX = endBlockX > width ? width : endBlockX;
+
+    int startBlockY = blockIdx.y * perBlockYQuota;
+    int endBlockY = (blockIdx.y + 1) * perBlockYQuota;
+    endBlockY = endBlockY > height ? height : endBlockY;
+
+    int startX = startBlockX + (ThreadIdx.x * perThreadXQuota);
+    int endX = startBlockX + ((ThreadIdx.x + 1) * perThreadXQuota);
+    endX = endX > endBlockX ? endBlockX : endX;
+
+    int startY = startBlockY + (ThreadIdx.y * perThreadYQuota);
+    int endY = startBlockY + ((ThreadIdx.y + 1) * perThreadYQuota);
+    endY = endY > endBlockY ? endBlockY : endY;
+    
+
 
     for (int j = startY; j < endY; j++) {
         for (int i = startX; i < endX; ++i) {
