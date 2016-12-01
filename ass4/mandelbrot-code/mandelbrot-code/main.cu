@@ -140,7 +140,6 @@ bool verifyResult (int *gold, int *result, int width, int height) {
             if (gold[i * width + j] != result[i * width + j]) {
                 printf ("Mismatch : [%d][%d], Expected : %d, Actual : %d\n",
                             i, j, gold[i * width + j], result[i * width + j]);
-                return 0;
             }
         }
     }
