@@ -47,32 +47,39 @@ __device__ void mandel(float c_re, float c_im, int count, int *counter)
 // Multi-threaded implementation of mandelbrot set image generation.
 // Multi-threading performed via pthreads.
 __global__ void mandelbrotThread(
-    float* x0, float* y0, float* x1, float* y1,
-    int* width, int* height,
-    int* maxIterations, int output[])
+    int output[])
 {
-    float dx = (*x1 - *x0) / *width;
-    float dy = (*y1 - *y0) / *height;
+    const unsigned int width = 1200;
+    const unsigned int height = 800;
+    const int maxIterations = 256;
+    int numThreads = 2;
 
-    int perBlockXQuota = (int)ceilf(*width/(float)gridDim.x);
-    int perBlockYQuota = (int)ceilf(*height/(float)gridDim.y);
+    float x0 = -2;
+    float x1 = 1;
+    float y0 = -1;
+    float y1 = 1;
+    float dx = (x1 - x0) / width;
+    float dy = (y1 - y0) / height;
+
+    int perBlockXQuota = (int)ceilf(width/(float)gridDim.x);
+    int perBlockYQuota = (int)ceilf(height/(float)gridDim.y);
 
     int startX = blockIdx.x * perBlockXQuota;
     int endX = (blockIdx.x + 1) * perBlockXQuota;
-    endX = endX > *width ? *width : endX;
+    endX = endX > width ? width : endX;
 
     int startY = blockIdx.y * perBlockYQuota;
     int endY = (blockIdx.y + 1) * perBlockYQuota;
-    endY = endY > *height ? *height : endY;
+    endY = endY > height ? height : endY;
 
     for (int j = startY; j < endY; j++) {
         for (int i = startX; i < endX; ++i) {
-            float x = *x0 + i * dx;
-            float y = *y0 + j * dy;
+            float x = x0 + i * dx;
+            float y = y0 + j * dy;
 
-            int index = (j * (*width) + i);
+            int index = (j * (width) + i);
 
-            mandel(x, y, *maxIterations, &output[index]);
+            mandel(x, y, maxIterations, &output[index]);
         }
 
     }
@@ -206,30 +213,15 @@ int main(int argc, char** argv) {
     memset(output_thread, 0, width * height * sizeof(int));
     double minThread = 1e30;
 
+    double startTime = CycleTimer::currentSeconds();
 
     int *d_output_thread, *d_width, *d_height, *d_maxIterations;
     float *d_x0, *d_y0, *d_x1, *d_y1;
 
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
-    cudaMalloc((void**)&d_width, sizeof(int));
-    cudaMalloc((void**)&d_height, sizeof(int));
-    cudaMalloc((void**)&d_maxIterations, sizeof(int));
-    cudaMalloc((void**)&d_x0, sizeof(float));
-    cudaMalloc((void**)&d_y0, sizeof(float));
-    cudaMalloc((void**)&d_x1, sizeof(float));
-    cudaMalloc((void**)&d_y1, sizeof(float));
-
-    cudaMemcpy(d_width, &width, sizeof(int), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_height, &height, sizeof(int), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_maxIterations, &maxIterations, sizeof(int), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_x0, &x0, sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_x1, &x1, sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_y1, &y1, sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_y0, &y0, sizeof(float), cudaMemcpyHostToDevice);
 
 
-    double startTime = CycleTimer::currentSeconds();
-    mandelbrotThread<<<50000, 1>>>(d_x0, d_y0, d_x1, d_y1, d_width, d_height, d_maxIterations, d_output_thread);
+    mandelbrotThread<<<50000, 1>>>(d_output_thread);
     cudaMemcpy(output_thread, d_output_thread, width * height * sizeof(int), cudaMemcpyDeviceToHost);
 
     double endTime = CycleTimer::currentSeconds();
