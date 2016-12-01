@@ -78,8 +78,8 @@ __global__ void mandelbrotThread(
     int endX = startBlockX + ((threadIdx.x + 1) * perThreadXQuota);
     endX = endX > endBlockX ? endBlockX : endX;
 
-    int startY = startBlockY + (ThreadIdx.y * perThreadYQuota);
-    int endY = startBlockY + ((ThreadIdx.y + 1) * perThreadYQuota);
+    int startY = startBlockY + (threadIdx.y * perThreadYQuota);
+    int endY = startBlockY + ((threadIdx.y + 1) * perThreadYQuota);
     endY = endY > endBlockY ? endBlockY : endY;
     
 
@@ -222,8 +222,9 @@ int main(int argc, char** argv) {
     cudaMalloc((void**)&x, sizeof(int));
 
     
-    double startTime = CycleTimer::currentSeconds();/*
-    int *d_output_thread, *d_width, *d_height, *d_maxIterations;
+    double startTime = CycleTimer::currentSeconds();
+    int *d_output_thread
+    /*    , *d_width, *d_height, *d_maxIterations;
     float *d_x0, *d_y0, *d_x1, *d_y1;*/
 
     cudaMalloc((void**)&d_output_thread, width * height * sizeof(int));
